@@ -24,15 +24,13 @@ A simple and responsive weather website that provides real-time weather informat
 - **Weather API** (e.g., OpenWeatherMap or similar)
 
 ---
-
+```md
  weather-site/
 │
 ├── index.html
 ├── style.css
 ├── script.js
 └── README.md
-
- 
 
 ```md
  
