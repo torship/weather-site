@@ -25,19 +25,18 @@ A simple and responsive weather website that provides real-time weather informat
 
 ---
 
-## 📸 Screenshots
-
-_Add screenshots of your website here (optional but recommended)._
-
-```md
-![Weather App Screenshot](screenshot.png)
-weather-site/
+ weather-site/
 │
 ├── index.html
 ├── style.css
 ├── script.js
 └── README.md
 
+ 
+
+```md
+ 
 git clone https://github.com/your-username/weather-site.git
 cd weather-site
 open index.html
+
