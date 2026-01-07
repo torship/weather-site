@@ -31,9 +31,7 @@ https://torship.github.io/weather-site/
   *(e.g., OpenWeatherMap or similar)*
 
 ---
-
-## 📂 Project Structure
-
+ 
 # 🌦️ Weather Website
 
 A modern, responsive weather website that provides real-time weather information for any city using a clean, minimal, and user-friendly interface. This project demonstrates API integration, responsive UI design, and dynamic data rendering using vanilla JavaScript.
@@ -41,13 +39,6 @@ A modern, responsive weather website that provides real-time weather information
 🔗 **Live Demo:**  
 https://torship.github.io/weather-site/
 
----
-
-## 📸 Screenshot
-
-![Weather Website Screenshot](./assets/weather-preview.png)
-
-> *Clean UI displaying temperature, weather condition, humidity, and wind speed.*
 
 ---
 
@@ -119,6 +110,7 @@ open index.html
 
 open index.html
 ##
+
 
 
 
