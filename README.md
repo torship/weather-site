@@ -7,13 +7,7 @@ https://torship.github.io/weather-site/
 
 ---
 
-## 📸 Screenshot
-
-![Weather Website Screenshot](./assets/weather-preview.png)
-
-> *Clean UI displaying temperature, weather condition, humidity, and wind speed.*
-
----
+ 
 
 ## 🚀 Features
 
@@ -125,6 +119,7 @@ open index.html
 
 open index.html
 ##
+
 
 
 
