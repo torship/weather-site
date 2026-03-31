@@ -2,46 +2,181 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SkyGlass | Premium Minimal Weather</title>
+    
+    <!-- Ultra-Clean Modern Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet"
-           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
-          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
-          crossorigin="anonymous" 
-          referrerpolicy="no-referrer" 
-     />
+    <!-- Phosphor Icons (Thin/Regular for Minimalism) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
-    <div class="card">
-        <div class="search">
-            <input type="text" placeholder="enter city name" spellcheck="false" >
-            <button><i class="fa-solid fa-magnifying-glass-location"></i></button>
 
+    <!-- Main Container -->
+   <!-- Main Container -->
+    <main class="app-container" id="appContainer">
+        
+        <!-- Header -->
+        <header class="header reveal">
+            <button class="glass-btn" id="favBtn" onclick="toggleFavorite()">
+                <i class="ph ph-heart"></i>
+            </button>
+            <div class="search-container">
+                <i class="ph ph-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Search for a city..." onkeypress="handleSearch(event)">
+            </div>
+            <button class="glass-btn location-btn" id="locationBtn" onclick="useCurrentLocation()" title="Use current location" aria-label="Use current location">
+                <i class="ph ph-navigation-arrow"></i>
+                <span class="location-btn-label">Current</span>
+            </button>
+            <button class="glass-btn unit-toggle" id="unitBtn" onclick="toggleUnit()">°C</button>
+        </header>
+
+        <!-- Alert Banner -->
+        <div class="weather-alert reveal" id="weatherAlert">
+            <i class="ph-fill ph-warning-circle" style="font-size: 1.5rem;"></i>
+            <span id="alertText">Severe weather conditions detected in this area.</span>
         </div>
-         <div class="weather">
-             <img src="https://cdn-icons-png.flaticon.com/128/3222/3222800.png" alt="">
-             <h1 class="temp">22°c</h1>    
-             <h2 class="city">new york</h2>
-             <div class="details">
-                <div class="col">
-                  <img src="https://cdn-icons-png.freepik.com/512/9290/9290540.png" alt="">
-                  <div>
-                     <p class="humidity">50%</p>
-                     <p>humidity</p>
-                  </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            
+            <!-- Hero -->
+            <section class="glass-panel hero reveal" id="heroCard">
+                <!-- Weather Animation Layers -->
+                <div id="anim-clear-day" class="weather-layer"><div class="the-sun"></div></div>
+                <div id="anim-clear-night" class="weather-layer"><div class="the-stars"></div><div class="the-moon"></div></div>
+                <div id="anim-clouds" class="weather-layer">
+                    <div class="the-cloud cloud-1"></div>
+                    <div class="the-cloud cloud-2"></div>
+                    <div class="the-cloud cloud-3"></div>
                 </div>
-                <div class="col">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaZo1rEaJAaJumt2lpXUIBfnm7-CNI9uxLAw&s" alt="">
-                    <div>
-                       <p class="wind">15 km/h</p>
-                       <p>wind speed</p>
+                <div id="anim-rain" class="weather-layer"><div class="the-rain"></div></div>
+                <div id="anim-lightning" class="weather-layer the-lightning"></div>
+
+                <div style="position: relative; z-index: 2; text-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                    <h1 class="text-h2 skeleton" id="cityName">Detecting Location</h1>
+                    <div class="text-h1 skeleton" id="currentTemp">--°</div>
+                    <div class="hero-desc skeleton" id="currentDesc">Loading conditions...</div>
+                    <div class="hero-hl skeleton" id="highLow">H:--° &nbsp;&nbsp;L:--°</div>
+                    <div style="margin-top: 16px;">
+                        <span class="hero-feels skeleton" id="feelsLike">Feels like --°</span>
                     </div>
-                  </div>
+                </div>
+            </section>
+
+            <!-- NEW FEATURE: AI Brain Insights -->
+            <section class="glass-panel ai-card reveal" id="aiCard">
+                <div class="text-caption" style="color: #fbcfe8;"><i class="ph-fill ph-sparkle ai-sparkle"></i> AI Weather Brain</div>
+                <div class="ai-content skeleton" id="aiInsights">Analyzing atmospheric conditions to generate your personalized daily insights...</div>
+                
+                <div class="text-caption" style="color: #a78bfa; margin-top: 16px;"><i class="ph-fill ph-t-shirt"></i> Smart Outfit</div>
+                <div class="ai-content skeleton" style="margin-top: 8px; font-weight: 500;" id="aiOutfit">Recommending attire...</div>
+            </section>
+
+            <!-- Hourly Chart (Bezier Curve) -->
+            <section class="glass-panel chart-card reveal">
+                <div class="text-caption chart-header"><i class="ph ph-clock"></i> 24-Hour Forecast</div>
+                <div class="chart-container" id="chartContainer">
+                    <svg class="chart-svg" id="hourlySvg" preserveAspectRatio="none"></svg>
+                    <div class="chart-labels" id="chartLabels"></div>
+                </div>
+            </section>
+
+            <!-- 7-Day Forecast -->
+            <section class="glass-panel daily-forecast reveal">
+                <div class="text-caption" style="margin-bottom: 8px;"><i class="ph ph-calendar"></i> 7-Day Outlook</div>
+                <div id="dailyContainer"></div>
+            </section>
+
+            <!-- Live Radar Mock -->
+            <section class="glass-panel radar-card reveal">
+                <div class="text-caption"><i class="ph ph-radar"></i> Precipitation Map</div>
+                <div class="radar-display">
+                    <div class="radar-sweep"></div>
+                    <i class="ph-fill ph-map-pin" style="color: #60a5fa; font-size: 1.8rem; z-index: 2; filter: drop-shadow(0 0 10px rgba(96,165,250,0.8));"></i>
+                </div>
+            </section>
+
+            <!-- Solar Arc -->
+            <section class="glass-panel sun-card reveal">
+                <div class="text-caption"><i class="ph ph-sun-horizon"></i> Solar Cycle</div>
+                <div class="sun-arc">
+                    <div class="sun-arc-path"></div>
+                    <div class="sun-orb" id="sunOrb"></div>
+                </div>
+                <div class="sun-times">
+                    <span id="sunriseTime" class="skeleton">--:--</span>
+                    <span id="sunsetTime" class="skeleton">--:--</span>
+                </div>
+            </section>
+
+            <!-- Comfort Index -->
+            <section class="glass-panel comfort-card reveal">
+                <div class="text-caption" style="align-self: flex-start;"><i class="ph ph-sparkle"></i> Comfort Index</div>
+                <div class="comfort-score skeleton" id="comfortScore">--</div>
+                <div class="comfort-desc skeleton" id="comfortDesc">Analyzing...</div>
+            </section>
+
+            <!-- Minor Metrics -->
+            <div class="glass-panel metric reveal">
+                <div class="text-caption"><i class="ph ph-wind"></i> Wind</div>
+                <div class="text-value skeleton" id="windVal">--</div>
+                <div class="text-unit">km/h</div>
+            </div>
+            <div class="glass-panel metric reveal">
+                <div class="text-caption"><i class="ph ph-drop"></i> Humidity</div>
+                <div class="text-value skeleton" id="humidityVal">--</div>
+                <div class="text-unit">%</div>
+            </div>
+            <div class="glass-panel metric reveal">
+                <div class="text-caption"><i class="ph ph-leaf"></i> Air Quality</div>
+                <div class="text-value skeleton" id="aqiVal" style="margin-bottom: 4px;">--</div>
+                <div class="text-unit" id="aqiDesc">Fetching</div>
+            </div>
+            <div class="glass-panel metric reveal">
+                <div class="text-caption"><i class="ph ph-sun-dim"></i> UV Index</div>
+                <div class="text-value skeleton" id="uvVal">--</div>
+                <div class="text-unit" id="uvDesc">Moderate</div>
+            </div>
+            <div class="glass-panel metric reveal">
+                <div class="text-caption"><i class="ph ph-eye"></i> Visibility</div>
+                <div class="text-value skeleton" id="visVal">--</div>
+                <div class="text-unit">km</div>
+            </div>
+            <div class="glass-panel metric reveal">
+                <div class="text-caption"><i class="ph ph-gauge"></i> Pressure</div>
+                <div class="text-value skeleton" id="pressureVal">--</div>
+                <div class="text-unit">hPa</div>
             </div>
 
         </div>
+    </main>
+
+    <!-- Floating Nav -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="scrollToTop()">
+            <i class="ph-fill ph-house"></i><span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" onclick="document.getElementById('searchInput').focus()">
+            <i class="ph ph-magnifying-glass"></i><span class="nav-label">Search</span>
+        </button>
+        <button class="nav-item" onclick="toggleDrawer()">
+            <i class="ph ph-list-bullets"></i><span class="nav-label">Locations</span>
+        </button>
+    </nav>
+
+    <!-- Saved Locations Drawer -->
+    <div class="fav-drawer" id="favDrawer">
+        <div class="fav-drawer-header">
+            Locations <button class="glass-btn" style="width: 40px; height: 40px;" onclick="toggleDrawer()"><i class="ph ph-x"></i></button>
+        </div>
+        <div class="fav-list" id="favList"></div>
     </div>
+
     <script src="app.js"></script>
 </body>
 </html>
